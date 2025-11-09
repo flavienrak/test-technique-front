@@ -19,7 +19,7 @@ importers:
         version: 2.0.0(db0@0.3.4)(ioredis@5.8.2)(magicast@0.3.5)
       '@nuxt/ui':
         specifier: ^4.1.0
-        version: 4.1.0(@babel/parser@7.28.5)(change-case@5.4.4)(db0@0.3.4)(embla-carousel@8.6.0)(ioredis@5.8.2)(magicast@0.3.5)(typescript@5.9.3)(vite@7.1.12(@types/node@24.10.0)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(yaml@2.8.1))(vue-router@4.6.3(vue@3.5.22(typescript@5.9.3)))(vue@3.5.22(typescript@5.9.3))(zod@4.1.12)
+        version: 4.1.0(@babel/parser@7.28.5)(change-case@5.4.4)(db0@0.3.4)(embla-carousel@8.6.0)(ioredis@5.8.2)(magicast@0.3.5)(typescript@5.9.3)(vite@7.1.12(@types/node@24.10.0)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(yaml@2.8.1))(vue-router@4.6.3(vue@3.5.22(typescript@5.9.3)))(vue@3.5.22(typescript@5.9.3))(zod@3.22.4)
       '@nuxtjs/i18n':
         specifier: 10.2.0
         version: 10.2.0(@vue/compiler-dom@3.5.22)(db0@0.3.4)(eslint@9.38.0(jiti@2.6.1))(ioredis@5.8.2)(magicast@0.3.5)(rollup@4.52.5)(vue@3.5.22(typescript@5.9.3))
@@ -32,6 +32,12 @@ importers:
       pinia-plugin-persistedstate:
         specifier: ^4.7.1
         version: 4.7.1(@nuxt/kit@4.2.0(magicast@0.3.5))(@pinia/nuxt@0.11.3(magicast@0.3.5)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))
+      vue:
+        specifier: ^3.5.22
+        version: 3.5.22(typescript@5.9.3)
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
     devDependencies:
       '@nuxt/eslint':
         specifier: ^1.9.0
@@ -4954,37 +4960,37 @@ packages:
     resolution: {integrity: sha512-zK7YHHz4ZXpW89AHXUPbQVGKI7uvkd3hzusTdotCg1UxyaVtg0zFJSTfW/Dq5f7OBBVnq6cZIaC8Ti4hb6dtCA==}
     engines: {node: '>= 14'}
 
-  zod@4.1.12:
-    resolution: {integrity: sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ==}
+  zod@3.22.4:
+    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
 
 snapshots:
 
-  '@ai-sdk/gateway@2.0.2(zod@4.1.12)':
+  '@ai-sdk/gateway@2.0.2(zod@3.22.4)':
     dependencies:
       '@ai-sdk/provider': 2.0.0
-      '@ai-sdk/provider-utils': 3.0.13(zod@4.1.12)
+      '@ai-sdk/provider-utils': 3.0.13(zod@3.22.4)
       '@vercel/oidc': 3.0.3
-      zod: 4.1.12
+      zod: 3.22.4
 
-  '@ai-sdk/provider-utils@3.0.13(zod@4.1.12)':
+  '@ai-sdk/provider-utils@3.0.13(zod@3.22.4)':
     dependencies:
       '@ai-sdk/provider': 2.0.0
       '@standard-schema/spec': 1.0.0
       eventsource-parser: 3.0.6
-      zod: 4.1.12
+      zod: 3.22.4
 
   '@ai-sdk/provider@2.0.0':
     dependencies:
       json-schema: 0.4.0
 
-  '@ai-sdk/vue@2.0.81(vue@3.5.22(typescript@5.9.3))(zod@4.1.12)':
+  '@ai-sdk/vue@2.0.81(vue@3.5.22(typescript@5.9.3))(zod@3.22.4)':
     dependencies:
-      '@ai-sdk/provider-utils': 3.0.13(zod@4.1.12)
-      ai: 5.0.81(zod@4.1.12)
+      '@ai-sdk/provider-utils': 3.0.13(zod@3.22.4)
+      ai: 5.0.81(zod@3.22.4)
       swrv: 1.1.0(vue@3.5.22(typescript@5.9.3))
     optionalDependencies:
       vue: 3.5.22(typescript@5.9.3)
-      zod: 4.1.12
+      zod: 3.22.4
 
   '@alloc/quick-lru@5.2.0': {}
 
@@ -6155,9 +6161,9 @@ snapshots:
     transitivePeerDependencies:
       - magicast
 
-  '@nuxt/ui@4.1.0(@babel/parser@7.28.5)(change-case@5.4.4)(db0@0.3.4)(embla-carousel@8.6.0)(ioredis@5.8.2)(magicast@0.3.5)(typescript@5.9.3)(vite@7.1.12(@types/node@24.10.0)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(yaml@2.8.1))(vue-router@4.6.3(vue@3.5.22(typescript@5.9.3)))(vue@3.5.22(typescript@5.9.3))(zod@4.1.12)':
+  '@nuxt/ui@4.1.0(@babel/parser@7.28.5)(change-case@5.4.4)(db0@0.3.4)(embla-carousel@8.6.0)(ioredis@5.8.2)(magicast@0.3.5)(typescript@5.9.3)(vite@7.1.12(@types/node@24.10.0)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(yaml@2.8.1))(vue-router@4.6.3(vue@3.5.22(typescript@5.9.3)))(vue@3.5.22(typescript@5.9.3))(zod@3.22.4)':
     dependencies:
-      '@ai-sdk/vue': 2.0.81(vue@3.5.22(typescript@5.9.3))(zod@4.1.12)
+      '@ai-sdk/vue': 2.0.81(vue@3.5.22(typescript@5.9.3))(zod@3.22.4)
       '@iconify/vue': 5.0.0(vue@3.5.22(typescript@5.9.3))
       '@internationalized/date': 3.10.0
       '@internationalized/number': 3.6.5
@@ -6206,7 +6212,7 @@ snapshots:
       vue-component-type-helpers: 3.1.2
     optionalDependencies:
       vue-router: 4.6.3(vue@3.5.22(typescript@5.9.3))
-      zod: 4.1.12
+      zod: 3.22.4
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -7311,13 +7317,13 @@ snapshots:
 
   agent-base@7.1.4: {}
 
-  ai@5.0.81(zod@4.1.12):
+  ai@5.0.81(zod@3.22.4):
     dependencies:
-      '@ai-sdk/gateway': 2.0.2(zod@4.1.12)
+      '@ai-sdk/gateway': 2.0.2(zod@3.22.4)
       '@ai-sdk/provider': 2.0.0
-      '@ai-sdk/provider-utils': 3.0.13(zod@4.1.12)
+      '@ai-sdk/provider-utils': 3.0.13(zod@3.22.4)
       '@opentelemetry/api': 1.9.0
-      zod: 4.1.12
+      zod: 3.22.4
 
   ajv@6.12.6:
     dependencies:
@@ -10429,4 +10435,4 @@ snapshots:
       compress-commons: 6.0.2
       readable-stream: 4.7.0
 
-  zod@4.1.12: {}
+  zod@3.22.4: {}
