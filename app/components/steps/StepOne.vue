@@ -39,7 +39,9 @@ function updateField(field: keyof typeof props.values, event: Event) {
   <div class="flex-1 flex flex-col gap-6">
     <h1 class="text-2xl font-semibold text-[#101828]">Faisons connaissance</h1>
     <div class="flex flex-col gap-1.5">
-      <p class="text-xs leading-4">Photo de profil</p>
+      <p class="text-xs leading-4 text-[#344054] font-medium">
+        Photo de profil
+      </p>
       <div class="flex items-center gap-8">
         <label
           class="h-[72px] w-[72px] flex justify-center items-center bg-[#f2f4f7] rounded-full border-[3px] border-white"
@@ -115,14 +117,14 @@ function updateField(field: keyof typeof props.values, event: Event) {
     </div>
 
     <div class="flex flex-col gap-1.5">
-      <label class="text-[#344054] text-xs"> Prénom </label>
+      <label class="text-[#344054] text-xs font-medium"> Prénom </label>
       <input
         :value="values.firstName"
         type="text"
         name="firstName"
         placeholder="Alain"
         auto-complete="off"
-        class="text-sm border bg-[#FFFFFF] rounded-md px-3 py-2"
+        class="h-9 text-sm border bg-[#FFFFFF] rounded-md px-3"
         :class="errors.firstName ? 'border-red-500' : 'border-[#CAD5E2]'"
         @input="updateField('firstName', $event)"
       />
@@ -132,14 +134,14 @@ function updateField(field: keyof typeof props.values, event: Event) {
     </div>
 
     <div class="flex flex-col gap-1.5">
-      <label class="text-[#344054] text-xs"> Nom </label>
+      <label class="text-[#344054] text-xs font-medium"> Nom </label>
       <input
         :value="values.lastName"
         type="text"
         name="lastName"
         placeholder="Provist"
         auto-complete="off"
-        class="text-sm border bg-[#FFFFFF] rounded-md px-3 py-2"
+        class="h-9 text-sm border bg-[#FFFFFF] rounded-md px-3"
         :class="errors.firstName ? 'border-red-500' : 'border-[#CAD5E2]'"
         @input="updateField('lastName', $event)"
       />
@@ -149,7 +151,7 @@ function updateField(field: keyof typeof props.values, event: Event) {
     </div>
 
     <div class="flex flex-col gap-1.5">
-      <label class="text-[#344054] text-xs"> Adresse mail </label>
+      <label class="text-[#344054] text-xs font-medium"> Adresse mail </label>
       <div class="relative w-full flex items-center">
         <span class="absolute left-3 w-5 h-5 text-[#90A1B9]">
           <svg
@@ -174,7 +176,7 @@ function updateField(field: keyof typeof props.values, event: Event) {
           type="email"
           placeholder="alain.provist@peugeot.com"
           auto-complete="off"
-          class="w-full text-sm border bg-[#FFFFFF] rounded-md ps-10 pe-3 py-2"
+          class="w-full h-9 text-sm border bg-[#FFFFFF] rounded-md ps-10 pe-3"
           :class="errors.firstName ? 'border-red-500' : 'border-[#CAD5E2]'"
           @input="updateField('email', $event)"
         />

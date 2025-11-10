@@ -7,4 +7,9 @@ export interface StepsType {
   website: string;
   address: string;
   sector: string;
+  profession: string;
+  linkedin: string;
+  experience: string;
+  estimation: string;
+  explanation: string;
 }

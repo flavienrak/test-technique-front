@@ -40,7 +40,9 @@ function updateField(field: keyof typeof props.values, event: Event) {
       Créez votre espace de travail
     </h1>
     <div class="flex flex-col gap-1.5">
-      <p class="text-xs leading-4">Logo de l’entreprise</p>
+      <p class="text-xs leading-4 text-[#344054] font-medium">
+        Logo de l’entreprise
+      </p>
       <div class="flex items-center gap-8">
         <label
           class="h-[72px] w-[72px] flex justify-center items-center bg-[#f2f4f7] rounded-2xl border-[3px] border-white"
@@ -126,14 +128,16 @@ function updateField(field: keyof typeof props.values, event: Event) {
     </div>
 
     <div class="flex flex-col gap-1.5">
-      <label class="text-[#344054] text-xs"> Nom de l’entreprise * </label>
+      <label class="text-[#344054] text-xs font-medium">
+        Nom de l’entreprise *
+      </label>
       <input
         :value="values.companyName"
         type="text"
         name="companyName"
         placeholder="Mon Entreprise"
         auto-complete="off"
-        class="text-sm border bg-[#FFFFFF] rounded-md px-3 py-2"
+        class="h-9 text-sm border bg-[#FFFFFF] rounded-md px-3"
         :class="errors.companyName ? 'border-red-500' : 'border-[#CAD5E2]'"
         @input="updateField('companyName', $event)"
       />
@@ -143,7 +147,7 @@ function updateField(field: keyof typeof props.values, event: Event) {
     </div>
 
     <div class="flex flex-col gap-1.5">
-      <label class="text-[#344054] text-xs">
+      <label class="text-[#344054] text-xs font-medium">
         Description de l’entreprise
       </label>
       <textarea
@@ -169,7 +173,7 @@ function updateField(field: keyof typeof props.values, event: Event) {
     </div>
 
     <div class="flex flex-col gap-1.5">
-      <label class="text-[#344054] text-xs"> Site internet </label>
+      <label class="text-[#344054] text-xs font-medium"> Site internet </label>
       <div class="relative w-full flex items-center">
         <p
           class="w-[76px] h-full absolute left-0 flex justify-center items-center text-[#475467] text-sm leading-5 bg-[#F9FAFB] border border-[#D0D5DD] rounded-l-md"
@@ -182,7 +186,7 @@ function updateField(field: keyof typeof props.values, event: Event) {
           type="text"
           placeholder="votre-entreprise.com"
           auto-complete="off"
-          class="w-full text-sm border bg-[#FFFFFF] rounded-md ps-22 pe-3 py-2"
+          class="w-full h-9 text-sm border bg-[#FFFFFF] rounded-md ps-22 pe-3"
           :class="errors.firstName ? 'border-red-500' : 'border-[#CAD5E2]'"
           @input="updateField('website', $event)"
         />
@@ -193,14 +197,16 @@ function updateField(field: keyof typeof props.values, event: Event) {
     </div>
 
     <div class="flex flex-col gap-1.5">
-      <label class="text-[#344054] text-xs"> Adresse du siège social </label>
+      <label class="text-[#344054] text-xs font-medium">
+        Adresse du siège social
+      </label>
       <input
         :value="values.address"
         name="address"
         type="text"
         placeholder="Renseignez l’adresse de votre entreprise"
         auto-complete="off"
-        class="w-full text-sm border bg-[#FFFFFF] rounded-md p-3 py-2"
+        class="w-full h-9 text-sm border bg-[#FFFFFF] rounded-md px-3"
         :class="errors.firstName ? 'border-red-500' : 'border-[#CAD5E2]'"
         @input="updateField('address', $event)"
       />
@@ -210,14 +216,16 @@ function updateField(field: keyof typeof props.values, event: Event) {
     </div>
 
     <div class="flex flex-col gap-1.5">
-      <label class="text-[#344054] text-xs"> Secteur d’activité </label>
+      <label class="text-[#344054] text-xs font-medium">
+        Secteur d’activité
+      </label>
       <input
         :value="values.sector"
         name="sector"
         type="text"
         placeholder="Renseignez le secteur d’activité de votre entreprise"
         auto-complete="off"
-        class="w-full text-sm border bg-[#FFFFFF] rounded-md p-3 py-2"
+        class="w-full h-9 text-sm border bg-[#FFFFFF] rounded-md px-3"
         :class="errors.firstName ? 'border-red-500' : 'border-[#CAD5E2]'"
         @input="updateField('sector', $event)"
       />

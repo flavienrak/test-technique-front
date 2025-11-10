@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import { z } from 'zod';
 import { ref, reactive } from 'vue';
 import type { StepsType } from '~/types/steps';
+import { createUserService } from '~/services/userService';
 
 const steps = ref([
   { id: 1, content: 'Faisons connaissance' },
@@ -19,7 +20,7 @@ const steps = ref([
 
 const currentStep = ref(steps.value[0]?.id);
 const initiales = ref('AP');
-const loadingCompany = ref(false);
+const isLoading = ref(false);
 
 const stepSchemas = {
   1: z.object({
@@ -30,7 +31,11 @@ const stepSchemas = {
   2: z.object({
     companyName: z.string().min(1, 'Le nom de l’entreprise est requis'),
   }),
-  3: z.object({}),
+  3: z.object({
+    profession: z.string().min(1, 'Le métier est requis'),
+    estimation: z.string().min(1, "L'estimation est requise"),
+    explanation: z.string().min(1, "L'explication est requise"),
+  }),
 };
 
 const values = reactive<StepsType>({
@@ -42,6 +47,11 @@ const values = reactive<StepsType>({
   website: '',
   address: '',
   sector: '',
+  profession: '',
+  linkedin: '',
+  experience: '',
+  estimation: '',
+  explanation: '',
 });
 
 const errors = reactive<Partial<StepsType>>({});
@@ -133,7 +143,7 @@ async function fetchCompanyInfo(email: string) {
       const company = data[0];
       return {
         companyName: company.name || domain,
-        website: `https://${company.domain}`,
+        website: company.domain,
         companyDescription: `${company.name} est une entreprise reconnue.`,
         sector: '',
       };
@@ -179,6 +189,28 @@ function resetForm() {
   currentStep.value = steps.value[0]?.id;
 }
 
+function createFormData() {
+  const formData = new FormData();
+
+  // Ajouter les champs du formulaire
+  Object.entries(values).forEach(([key, value]) => {
+    if (value !== null && value !== undefined) {
+      formData.append(key, value);
+    }
+  });
+
+  // Ajouter les fichiers si présents
+  if (userFile.value) {
+    formData.append('userFile', userFile.value);
+  }
+
+  if (companyFile.value) {
+    formData.append('companyFile', companyFile.value);
+  }
+
+  return formData;
+}
+
 async function nextStep() {
   if (!validateCurrentStep()) return;
 
@@ -191,9 +223,9 @@ async function nextStep() {
     !values.website &&
     values.email !== lastFetchedEmail.value
   ) {
-    loadingCompany.value = true;
+    isLoading.value = true;
     const info = await fetchCompanyInfo(values.email);
-    loadingCompany.value = false;
+    isLoading.value = false;
 
     if (info) {
       Object.assign(values, info);
@@ -205,6 +237,14 @@ async function nextStep() {
   if (currentStep.value && currentStep.value < steps.value.length) {
     currentStep.value++;
   } else {
+    isLoading.value = true;
+
+    const formData = createFormData();
+    const res = await createUserService(formData);
+    console.log(res);
+
+    isLoading.value = false;
+
     // Lancer confetti
     confetti({
       particleCount: 100,
@@ -319,7 +359,12 @@ function prevStep() {
               @update-values="updateValues"
             />
 
-            <StepThree v-if="steps[2] && currentStep === steps[2].id" />
+            <StepThree
+              v-if="steps[2] && currentStep === steps[2].id"
+              :values="values"
+              :errors="errors"
+              @update-values="updateValues"
+            />
           </div>
 
           <div class="flex items-center gap-4">
@@ -348,12 +393,12 @@ function prevStep() {
 
             <button
               class="w-full h-9 flex items-center justify-center gap-1 bg-[#0072FF] rounded-[8px] text-sm text-white cursor-pointer hover:opacity-80 outline-0"
-              :class="loadingCompany ? 'opacity-80' : ''"
-              :disabled="loadingCompany"
+              :class="isLoading ? 'opacity-80' : ''"
+              :disabled="isLoading"
               @click="nextStep"
             >
               <svg
-                v-if="loadingCompany"
+                v-if="isLoading"
                 aria-hidden="true"
                 role="status"
                 class="inline w-4 h-4 animate-spin"
@@ -371,9 +416,7 @@ function prevStep() {
                 />
               </svg>
 
-              <span>
-                {{ currentStep === steps.length ? 'Soumettre' : 'Continuer' }}
-              </span>
+              <span> Continuer </span>
             </button>
           </div>
         </div>

@@ -15,6 +15,8 @@ export default defineNuxtConfig({
         defaultLocale: 'fr',
       },
     ],
+    'shadcn-nuxt',
+    '@nuxtjs/tailwindcss',
   ],
 
   devtools: {
@@ -22,6 +24,12 @@ export default defineNuxtConfig({
   },
 
   css: ['~/assets/css/main.css'],
+
+  runtimeConfig: {
+    public: {
+      apiBase: process.env.NUXT_API_BASE_URL,
+    },
+  },
 
   routeRules: {
     '/': { prerender: true },
