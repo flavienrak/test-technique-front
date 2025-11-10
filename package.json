@@ -17,13 +17,16 @@
     "@nuxt/ui": "^4.1.0",
     "@nuxtjs/i18n": "10.2.0",
     "@pinia/nuxt": "0.11.3",
+    "canvas-confetti": "^1.9.4",
     "pinia": "^3.0.4",
     "pinia-plugin-persistedstate": "^4.7.1",
+    "sweetalert2": "^11.26.3",
     "vue": "^3.5.22",
     "zod": "^3.22.4"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.9.0",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^24.10.0",
     "eslint": "^9.38.0",
     "eslint-config-prettier": "^10.1.8",

@@ -5,28 +5,28 @@ const props = defineProps<{
   values: StepsType;
   errors: Partial<StepsType>;
   initiales: string;
-  photoPreview: string | null;
+  userPreview: string | null;
 }>();
 
 const fileInput = ref<HTMLInputElement | null>(null);
 
 const emit = defineEmits<{
-  (e: 'photo-change', event: Event): void;
-  (e: 'remove-photo'): void;
+  (e: 'change-file', event: Event): void;
+  (e: 'remove-file'): void;
   (e: 'update-values', field: keyof typeof props.values, value: string): void;
 }>();
 
-function handleChange(event: Event) {
-  emit('photo-change', event);
+function handleChangeFile(event: Event) {
+  emit('change-file', event);
 }
 
-function handleRemove() {
+function handleRemoveFile() {
   // Reset input file
   if (fileInput.value) {
     fileInput.value.value = '';
   }
 
-  emit('remove-photo');
+  emit('remove-file');
 }
 
 function updateField(field: keyof typeof props.values, event: Event) {
@@ -50,8 +50,8 @@ function updateField(field: keyof typeof props.values, event: Event) {
           "
         >
           <img
-            v-if="photoPreview"
-            :src="photoPreview"
+            v-if="userPreview"
+            :src="userPreview"
             alt="Profil"
             class="w-full h-full rounded-full object-cover"
           />
@@ -74,7 +74,7 @@ function updateField(field: keyof typeof props.values, event: Event) {
                 type="file"
                 class="hidden"
                 accept=".png,.jpeg"
-                @change="handleChange"
+                @change="handleChangeFile"
               />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -97,12 +97,12 @@ function updateField(field: keyof typeof props.values, event: Event) {
               type="button"
               class="border px-3 py-2 rounded-md"
               :class="
-                photoPreview
+                userPreview
                   ? 'text-[#475467] border-[#D0D5DD] cursor-pointer'
                   : 'text-[#98A2B3] border-[#98A2B3]'
               "
-              :disabled="!photoPreview"
-              @click="handleRemove"
+              :disabled="!userPreview"
+              @click="handleRemoveFile"
             >
               Supprimer
             </button>

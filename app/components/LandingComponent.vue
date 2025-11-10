@@ -3,11 +3,13 @@ import RightBox from '~/components/RightBox.vue';
 import ClientOnly from '~/components/ClientOnly.vue';
 import StepOne from './steps/StepOne.vue';
 import StepTwo from './steps/StepTwo.vue';
+import StepThree from './steps/StepThree.vue';
+import confetti from 'canvas-confetti';
+import Swal from 'sweetalert2';
 
 import { z } from 'zod';
 import { ref, reactive } from 'vue';
 import type { StepsType } from '~/types/steps';
-import StepThree from './steps/StepThree.vue';
 
 const steps = ref([
   { id: 1, content: 'Faisons connaissance' },
@@ -16,8 +18,8 @@ const steps = ref([
 ]);
 
 const currentStep = ref(steps.value[0]?.id);
-
 const initiales = ref('AP');
+const loadingCompany = ref(false);
 
 const stepSchemas = {
   1: z.object({
@@ -44,20 +46,35 @@ const values = reactive<StepsType>({
 
 const errors = reactive<Partial<StepsType>>({});
 
-// Gestion de la photo
-const photoFile = ref<File | null>(null);
-const photoPreview = ref<string | null>(null);
+// Files
+const userFile = ref<File | null>(null);
+const userPreview = ref<string | null>(null);
 
-function onPhotoChange(event: Event) {
+const companyFile = ref<File | null>(null);
+const companyPreview = ref<string | null>(null);
+
+function handleChangeUserFile(event: Event) {
   const target = event.target as HTMLInputElement;
   if (!target.files || target.files.length === 0) return;
-  photoFile.value = target.files[0] as File;
-  photoPreview.value = URL.createObjectURL(photoFile.value);
+  userFile.value = target.files[0] as File;
+  userPreview.value = URL.createObjectURL(userFile.value);
 }
 
-function removePhoto() {
-  photoFile.value = null;
-  photoPreview.value = null;
+function handleChangeCompanyFile(event: Event) {
+  const target = event.target as HTMLInputElement;
+  if (!target.files || target.files.length === 0) return;
+  companyFile.value = target.files[0] as File;
+  companyPreview.value = URL.createObjectURL(companyFile.value);
+}
+
+function removeUserFile() {
+  userFile.value = null;
+  userPreview.value = null;
+}
+
+function removeCompanyFile() {
+  companyFile.value = null;
+  companyPreview.value = null;
 }
 
 // Mettre à jour les initiales
@@ -100,15 +117,112 @@ function validateCurrentStep() {
   return true;
 }
 
+const lastFetchedEmail = ref<string | null>(null);
+
+// 🔹 Fonction pour récupérer les infos via l’API Clearbit
+async function fetchCompanyInfo(email: string) {
+  const domain = extractDomainFromEmail(email);
+  if (!domain) return null;
+
+  try {
+    const response = await fetch(
+      `https://autocomplete.clearbit.com/v1/companies/suggest?query=${domain}`,
+    );
+    const data = await response.json();
+    if (data && data.length > 0) {
+      const company = data[0];
+      return {
+        companyName: company.name || domain,
+        website: `https://${company.domain}`,
+        companyDescription: `${company.name} est une entreprise reconnue.`,
+        sector: '',
+      };
+    }
+  } catch (err) {
+    console.error('Erreur lors de la récupération Clearbit:', err);
+  }
+
+  return null;
+}
+
 function updateValues(field: keyof StepsType, value: string) {
   values[field] = value;
 }
 
-// Passer à l'étape suivante
-function nextStep() {
+function resetForm() {
+  // Reset des valeurs du formulaire
+  Object.assign(values, {
+    firstName: '',
+    lastName: '',
+    email: '',
+    companyName: '',
+    companyDescription: '',
+    website: '',
+    address: '',
+    sector: '',
+  });
+
+  // Reset des erreurs
+  (Object.keys(errors) as (keyof typeof errors)[]).forEach((k) => {
+    errors[k] = undefined;
+  });
+
+  // Reset autres refs
+  userFile.value = null;
+  userPreview.value = null;
+  companyFile.value = null;
+  companyPreview.value = null;
+  initiales.value = 'AP';
+  lastFetchedEmail.value = null;
+
+  // Reset step
+  currentStep.value = steps.value[0]?.id;
+}
+
+async function nextStep() {
   if (!validateCurrentStep()) return;
+
+  // ⚙️ Pré-remplissage infos entreprise si step 1 et champs vides
+  if (
+    currentStep.value === 1 &&
+    values.email &&
+    !values.companyName &&
+    !values.companyDescription &&
+    !values.website &&
+    values.email !== lastFetchedEmail.value
+  ) {
+    loadingCompany.value = true;
+    const info = await fetchCompanyInfo(values.email);
+    loadingCompany.value = false;
+
+    if (info) {
+      Object.assign(values, info);
+      lastFetchedEmail.value = values.email;
+    }
+  }
+
+  // ✅ Passer à l’étape suivante
   if (currentStep.value && currentStep.value < steps.value.length) {
     currentStep.value++;
+  } else {
+    // Lancer confetti
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+    });
+
+    // Afficher SweetAlert2
+    Swal.fire({
+      title: 'Félicitations !',
+      text: 'Vous avez accompli toutes les étapes avec succès.',
+      icon: 'success',
+      confirmButtonText: 'OK',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        resetForm();
+      }
+    });
   }
 }
 
@@ -185,23 +299,23 @@ function prevStep() {
             <StepOne
               v-if="steps[0] && currentStep === steps[0].id"
               :initiales="initiales"
-              :photo-preview="photoPreview"
+              :user-preview="userPreview"
               :values="values"
               :errors="errors"
               @next="nextStep"
-              @photo-change="onPhotoChange"
-              @remove-photo="removePhoto"
+              @change-file="handleChangeUserFile"
+              @remove-file="removeUserFile"
               @update-values="updateValues"
             />
 
             <StepTwo
               v-if="steps[1] && currentStep === steps[1].id"
-              :photo-preview="photoPreview"
+              :company-preview="companyPreview"
               :values="values"
               :errors="errors"
               @next="nextStep"
-              @photo-change="onPhotoChange"
-              @remove-photo="removePhoto"
+              @change-file="handleChangeCompanyFile"
+              @remove-file="removeCompanyFile"
               @update-values="updateValues"
             />
 
@@ -231,24 +345,47 @@ function prevStep() {
               </svg>
               <span class="text-sm font-medium leading-5">Retour</span>
             </button>
+
             <button
-              v-if="currentStep === steps.length"
-              class="w-full h-9 bg-[#0072FF] rounded-[8px] text-sm text-white cursor-pointer hover:opacity-80 outline-0"
+              class="w-full h-9 flex items-center justify-center gap-1 bg-[#0072FF] rounded-[8px] text-sm text-white cursor-pointer hover:opacity-80 outline-0"
+              :class="loadingCompany ? 'opacity-80' : ''"
+              :disabled="loadingCompany"
               @click="nextStep"
             >
-              Soumettre
-            </button>
-            <button
-              v-else
-              class="w-full h-9 bg-[#0072FF] rounded-[8px] text-sm text-white cursor-pointer hover:opacity-80 outline-0"
-              @click="nextStep"
-            >
-              Continuer
+              <svg
+                v-if="loadingCompany"
+                aria-hidden="true"
+                role="status"
+                class="inline w-4 h-4 animate-spin"
+                viewBox="0 0 100 101"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                  fill="#E5E7EB"
+                />
+                <path
+                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                  fill="currentColor"
+                />
+              </svg>
+
+              <span>
+                {{ currentStep === steps.length ? 'Soumettre' : 'Continuer' }}
+              </span>
             </button>
           </div>
         </div>
 
-        <RightBox />
+        <RightBox
+          v-if="currentStep"
+          :current-step="currentStep"
+          :initiales="initiales"
+          :values="values"
+          :user-preview="userPreview"
+          :company-preview="companyPreview"
+        />
       </div>
     </div>
   </ClientOnly>

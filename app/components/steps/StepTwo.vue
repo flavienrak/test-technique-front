@@ -4,28 +4,28 @@ import type { StepsType } from '~/types/steps';
 const props = defineProps<{
   values: StepsType;
   errors: Partial<StepsType>;
-  photoPreview: string | null;
+  companyPreview: string | null;
 }>();
 
 const fileInput = ref<HTMLInputElement | null>(null);
 
 const emit = defineEmits<{
-  (e: 'photo-change', event: Event): void;
-  (e: 'remove-photo'): void;
+  (e: 'change-file', event: Event): void;
+  (e: 'remove-file'): void;
   (e: 'update-values', field: keyof typeof props.values, value: string): void;
 }>();
 
-function handleChange(event: Event) {
-  emit('photo-change', event);
+function handleChangeFile(event: Event) {
+  emit('change-file', event);
 }
 
-function handleRemove() {
+function handleRemoveFile() {
   // Reset input file
   if (fileInput.value) {
     fileInput.value.value = '';
   }
 
-  emit('remove-photo');
+  emit('remove-file');
 }
 
 function updateField(field: keyof typeof props.values, event: Event) {
@@ -43,7 +43,7 @@ function updateField(field: keyof typeof props.values, event: Event) {
       <p class="text-xs leading-4">Logo de l’entreprise</p>
       <div class="flex items-center gap-8">
         <label
-          class="h-[72px] w-[72px] flex justify-center items-center bg-[#f2f4f7] rounded-full border-[3px] border-white"
+          class="h-[72px] w-[72px] flex justify-center items-center bg-[#f2f4f7] rounded-2xl border-[3px] border-white"
           style="
             box-shadow:
               0px 2px 4px -2px #1018280f,
@@ -51,10 +51,10 @@ function updateField(field: keyof typeof props.values, event: Event) {
           "
         >
           <img
-            v-if="photoPreview"
-            :src="photoPreview"
+            v-if="companyPreview"
+            :src="companyPreview"
             alt="Profil"
-            class="w-full h-full rounded-full object-cover"
+            class="w-full h-full rounded-xl object-cover"
           />
           <svg
             v-else
@@ -85,7 +85,7 @@ function updateField(field: keyof typeof props.values, event: Event) {
                 type="file"
                 class="hidden"
                 accept=".png,.jpeg"
-                @change="handleChange"
+                @change="handleChangeFile"
               />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -108,12 +108,12 @@ function updateField(field: keyof typeof props.values, event: Event) {
               type="button"
               class="border px-3 py-2 rounded-md"
               :class="
-                photoPreview
+                companyPreview
                   ? 'text-[#475467] border-[#D0D5DD] cursor-pointer'
                   : 'text-[#98A2B3] border-[#98A2B3]'
               "
-              :disabled="!photoPreview"
-              @click="handleRemove"
+              :disabled="!companyPreview"
+              @click="handleRemoveFile"
             >
               Supprimer
             </button>
@@ -152,12 +152,12 @@ function updateField(field: keyof typeof props.values, event: Event) {
         name="companyDescription"
         placeholder="Décrivez votre entreprise brièvement :
 
-        •   Histoire et chiffres clés
-        •   Produits ou services commercialisés
-        •   Culture et valeurs"
+    •   Histoire et chiffres clés
+    •   Produits ou services commercialisés
+    •   Culture et valeurs"
         auto-complete="off"
         rows="5"
-        class="custom-scrollbar text-sm border bg-[#FFFFFF] rounded-md p-3 resize-none"
+        class="custom-scrollbar text-sm border bg-[#FFFFFF] font-normal rounded-md p-3 resize-none leading-5"
         :class="
           errors.companyDescription ? 'border-red-500' : 'border-[#CAD5E2]'
         "
