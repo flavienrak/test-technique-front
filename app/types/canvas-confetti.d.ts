@@ -1,11 +1,25 @@
 declare module 'canvas-confetti' {
-  interface ConfettiOptions {
+  export interface ConfettiOptions {
     particleCount?: number;
+    angle?: number;
     spread?: number;
     origin?: { x?: number; y?: number };
-    [key: string]: any;
+    colors?: string[];
+    gravity?: number;
+    scalar?: number;
+    drift?: number;
+    ticks?: number;
+    zIndex?: number;
   }
 
-  function confetti(options?: ConfettiOptions): void;
-  export = confetti;
+  export interface Confetti {
+    (options?: ConfettiOptions): void;
+    create: (
+      canvas: HTMLElement,
+      options?: { resize?: boolean; useWorker?: boolean },
+    ) => Confetti;
+  }
+
+  const confetti: Confetti;
+  export default confetti;
 }
